@@ -68,4 +68,4 @@ The 3-tier architecture is composed of three primary layers, each with distinct 
 
 # **Steps:**
 
-# **Steps-01 Create an EKS Cluster**
+## **Steps-01 Create an EKS Cluster**
