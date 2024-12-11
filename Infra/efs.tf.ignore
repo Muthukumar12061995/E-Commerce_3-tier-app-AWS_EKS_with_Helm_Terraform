@@ -1,0 +1,29 @@
+# Policy allows the EFS CSI driver pod to call AWS services to provision volume on your behalf.
+
+# Attach the EFS Policy to the EKS Worker Node Role:
+
+resource "aws_iam_role_policy_attachment" "amazon_efs_csi_policy" {
+  role = aws_iam_role.worker_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
+}
+
+resource "aws_efs_file_system" "efs" {
+  creation_token = "eks"
+  performance_mode = "generalPurpose"
+  throughput_mode = "bursting"
+  encrypted = true
+}
+
+# Mount target for each AZ where worker nodes subnets are created
+resource "aws_efs_mount_target" "efs_mount_target_zone1" {
+  subnet_id = aws_subnet.private_zone1.id
+  file_system_id = aws_efs_file_system.efs.id
+  security_groups = [ aws_eks_cluster.eks.vpc_config[0].cluster_security_group_id ]
+}
+
+resource "aws_efs_mount_target" "efs_mount_target_zone2" {
+  subnet_id = aws_subnet.private_zone2.id
+  file_system_id = aws_efs_file_system.efs.id
+  security_groups = [ aws_eks_cluster.eks.vpc_config[0].cluster_security_group_id ]
+}
+
