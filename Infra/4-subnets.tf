@@ -1,64 +1,50 @@
-resource "aws_subnet" "private_zone1" {
-  vpc_id            = aws_vpc.main.id
+resource "aws_subnet" "private_subnet_zone1" {
+  vpc_id = aws_vpc.vpc.id
   availability_zone = local.zone1
-  cidr_block        = "10.0.0.0/19"
+  cidr_block = "10.0.1.0/24"
 
   tags = {
-    "Name"                                        = "${local.cluster_name}-private-${local.zone1}"
-    "kubernetes.io/role/internal-elb"             = "1"
-    "kubernetes.io/cluster/${local.cluster_name}" = "owned"
-  }
-}
-
-resource "aws_subnet" "private_zone2" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.32.0/19"
-  availability_zone = local.zone2
-
-  tags = {
-    Name = "${local.cluster_name}-private-${local.zone2}"
-    /* 
-private subnet -- internal elb is a special tag used by 
-EKS (Kubernetes & AWS load balancer controller) 
-to create private load balancer 
-if you want to expose your service internally within VPC
-value -> 1 to enable, 0 to disable
-*/
+    Name = "${local.cluster-name}-private-subnet-${local.zone1}"
     "kubernetes.io/role/internal-elb" = "1"
-    /* 
-Optional but important, if you want to create multiple EKS
-cluster in single AWS account
-value -> owned & shared
-*/
-    "kubernetes.io/cluster/${local.cluster_name}" = "owned"
+    "kubernetes.io/cluster/${local.cluster-name}" = "owned"
+   }
+}
+
+resource "aws_subnet" "private_subnet_zone2" {
+  vpc_id = aws_vpc.vpc.id
+  availability_zone = local.zone2
+  cidr_block = "10.0.2.0/24"
+  
+  tags = {
+    Name = "${local.cluster-name}-private-subnet-${local.zone2}"
+    "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/cluster${local.cluster-name}" = "owned"
   }
 }
 
-resource "aws_subnet" "public_zone1" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.64.0/19"
+resource "aws_subnet" "public_subnet_zone1" {
+  vpc_id = aws_vpc.vpc.id
+  availability_zone = local.zone1
+  cidr_block = "10.0.10.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = local.zone1
 
   tags = {
-    "Name"                                        = "${local.cluster_name}-public-${local.zone1}"
-    "kubernetes.io/role/elb"                      = "1"
-    "kubernetes.io/cluster/${local.cluster_name}" = "owned"
+    Name = "${local.cluster-name}-public-subnet-${local.zone1}"
+    "kubernetes.io/role/elb" = "1"
+    "kubernetes.io/cluster/${local.cluster-name}" = "owned"
   }
 }
 
-resource "aws_subnet" "public_zone2" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.96.0/19"
+resource "aws_subnet" "public_subnet_zone2" {
+  vpc_id = aws_vpc.vpc.id
+  availability_zone = local.zone2
+  cidr_block = "10.0.20.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = local.zone2
-
+  
   tags = {
-    "Name" = "${local.cluster_name}-public-${local.zone2}"
-    /*
-Public subnet --  elb tag instead of internal-elb in private subnet
-*/
-    "kubernetes.io/role/elb"                      = "1"
-    "kubernetes.io/cluster/${local.cluster_name}" = "owned"
+    Name = "${local.cluster-name}-public-subnet-${local.zone2}"
+    "kubernetes.io/role/elb" ="1"
+    "kubernetes.io/cluster/${local.cluster-name}" = "owned"
   }
+    
 }

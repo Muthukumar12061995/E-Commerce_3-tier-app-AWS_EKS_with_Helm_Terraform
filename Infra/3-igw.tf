@@ -1,6 +1,7 @@
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc.id
+
   tags = {
-    Name = "${local.cluster_name}-igw"
+    Name = "${local.cluster-name}-igw"
   }
 }

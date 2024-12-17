@@ -1,54 +1,57 @@
-resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.main.id
+resource "aws_route_table" "private_route" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = aws_vpc.vpc.cidr_block
+    gateway_id = "local"
+  }
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.nat.id
+    # Must mention nat gw, you will face issue in state matching process
+    nat_gateway_id = aws_nat_gateway.nat.id
   }
 
-  route {
-    cidr_block = "10.0.0.0/16"
-    gateway_id = "local"
-  }
   tags = {
-    Name = "${local.cluster_name}-private"
+    Name = "${local.cluster-name}-private-route"
   }
 }
 
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+
+resource "aws_route_table" "public_route" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = aws_vpc.vpc.cidr_block
+    gateway_id = "local"
+  }
 
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
-
-  route {
-    cidr_block = "10.0.0.0/16"
-    gateway_id = "local"
-  }
-
+  
   tags = {
-    Name = "${local.cluster_name}-public"
+    Name = "${local.cluster-name}-public-route"
   }
 }
 
-resource "aws_route_table_association" "private_zone1" {
-  subnet_id      = aws_subnet.private_zone1.id
-  route_table_id = aws_route_table.private.id
+resource "aws_route_table_association" "private_subnet_1" {
+  subnet_id = aws_subnet.private_subnet_zone1.id
+  route_table_id = aws_route_table.private_route.id
 }
 
-resource "aws_route_table_association" "private_zone2" {
-  subnet_id      = aws_subnet.private_zone2.id
-  route_table_id = aws_route_table.private.id
+resource "aws_route_table_association" "private_subnet_2" {
+  subnet_id = aws_subnet.private_subnet_zone2.id
+  route_table_id = aws_route_table.private_route.id
 }
 
-resource "aws_route_table_association" "public_zone1" {
-  subnet_id      = aws_subnet.public_zone1.id
-  route_table_id = aws_route_table.public.id
+resource "aws_route_table_association" "public_subnet_1" {
+  subnet_id = aws_subnet.public_subnet_zone1.id
+  route_table_id = aws_route_table.public_route.id
 }
 
-resource "aws_route_table_association" "public_zone2" {
-  subnet_id      = aws_subnet.public_zone2.id
-  route_table_id = aws_route_table.public.id
+resource "aws_route_table_association" "public_subnet_2" {
+  subnet_id = aws_subnet.public_subnet_zone2.id
+  route_table_id = aws_route_table.public_route.id
 }

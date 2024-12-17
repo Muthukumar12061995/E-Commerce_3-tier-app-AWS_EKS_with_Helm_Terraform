@@ -1,25 +1,29 @@
-
-# aws provider 
-provider "aws" {
-  region  = local.region
-  profile = "cloud_user"
-
-  /* 
-  Optional, cloud_user will assume the AWS Resource Administrator 
-  role to provision resources.
-  */
-  # assume_role {
-  #   role_arn = "arn:aws:iam::Account_ID:role/terraform_admin"
-  #   session_name = "TerraformSession"
-  # }
-}
-
 terraform {
   required_version = ">=1.0"
+
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~>5.49"
+        source = "hashicorp/aws"
+        version = "~>5.49"
+    }
+  }
+}
+
+provider "aws" {
+    region = local.region
+    profile = local.tf-profile
+
+# Optional - assume role to get access to manage aws resources 
+    # assume_role {
+    #   role_arn = ""
+    #   session_name = ""
+    # }
+
+  default_tags {
+    tags = {
+      "Cost" = "DXB-8080"
+      "Project" = "DXB-P-1217"
+      "Team" = "SuperNovas"
     }
   }
 }

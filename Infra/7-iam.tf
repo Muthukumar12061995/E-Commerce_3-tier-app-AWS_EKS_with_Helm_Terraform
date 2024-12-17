@@ -1,69 +1,65 @@
-
-###########  EKS Cluster Role and Policy ##########
+################### EKS Cluster Role & Policy #######################
 
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "${local.cluster_name}-eks-cluster-role"
   assume_role_policy = jsonencode(
     {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Action" : "sts:AssumeRole",
-          "Principal" : {
-            "Service" : "eks.amazonaws.com"
-          },
-          "Effect" : "Allow"
-        }
-      ]
+        "Version" : "2012-10-17",
+        "Statement" : [
+            {
+                "Action" : "sts:AssumeRole",
+                "Principal" : {
+                    "Service" : "eks.amazonaws.com"
+                },
+                "Effect" : "Allow"
+            }
+        ]
     }
   )
+  tags = {
+    Name = "${local.cluster-name}-cluster-role"
+  }
 }
 
-resource "aws_iam_role_policy_attachment" "eks" {
+
+resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_cluster_role.name
+  role = aws_iam_role.eks_cluster_role.name
 }
 
-##########  EKS Worker Node Policy  ##########
+################### EKS Worker Node Role & Policy #######################
 
-resource "aws_iam_role" "worker_node_role" {
-  name = "${local.cluster_name}-eks-worker-node-role"
+resource "aws_iam_role" "eks_worker_node_role" {
   assume_role_policy = jsonencode(
     {
-      "Version" : "2012-10-17"
-      "Statement" : [
-        {
-          "Action" : "sts:AssumeRole",
-          "Principal" : {
-            "Service" : "ec2.amazonaws.com"
-          },
-          "Effect" : "Allow"
-        }
-      ]
+        "Version" : "2012-10-17",
+        "Statement" :  [
+            {
+                "Action" : "sts:AssumeRole",
+                "Principal" : {
+                    "Service" : "eks.amazonaws.com"
+                }
+                "Effect" : "Allow"
+            }
+        ]
     }
   )
+
+  tags = {
+    Name = "${local.cluster-name}-worker-node-role"
+  }
 }
 
-# This policy now includes AssumeRoleForPodIdentity for the Pod Identity Agent
-
-resource "aws_iam_role_policy_attachment" "amazon_eks_worker_node_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.worker_node_role.name
+resource "aws_iam_role_policy_attachment" "eks_worker_node_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  role = aws_iam_role.eks_worker_node_role.name
 }
 
-# To manage secondary IP's for the Pods
-
-resource "aws_iam_role_policy_attachment" "amazon_eks_cni_policy" {
+resource "aws_iam_role_policy_attachment" "eks_cni_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.worker_node_role.name
+  role = aws_iam_role.eks_worker_node_role.name
 }
 
-# To provide read only access to ECR
-
-resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_policy" {
+resource "aws_iam_role_policy_attachment" "ec2_ecr_read_only" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.worker_node_role.name
+  role = aws_iam_role.eks_worker_node_role.name
 }
-
-
-
