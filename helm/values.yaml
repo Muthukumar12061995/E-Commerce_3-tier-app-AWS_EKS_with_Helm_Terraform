@@ -1,0 +1,19 @@
+prometheus:
+  service:
+    type: NodePort
+    nodePort: 30091  # specify a nodePort if needed, or let Kubernetes assign one automatically
+
+alertmanager:
+  service:
+    type: NodePort
+    nodePort: 30092 # specify a nodePort if needed, or let Kubernetes assign one automaticall
+
+grafana:
+  service:
+    type: NodePort
+    nodePort: 30093  # specify a nodePort if needed, or let Kubernetes assign one automatically
+# specify
+alertmanager:
+ # Add this block to your values.yaml file to resolve the issue.
+    alertmanagerSpec:
+      replicas: 2
