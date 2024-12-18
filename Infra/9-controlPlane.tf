@@ -4,7 +4,8 @@ resource "aws_eks_cluster" "eks" {
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    security_group_ids      = [aws_security_group.eks_cluster_sg.id, aws_security_group.eks_workerNode_sg.id]
+    # Add as additional security group along with default SG
+    # security_group_ids      = [aws_security_group.eks_cluster_sg.id]
     endpoint_private_access = true
     endpoint_public_access  = true
     subnet_ids              = [aws_subnet.private_subnet_zone1.id, aws_subnet.private_subnet_zone2.id]

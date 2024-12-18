@@ -32,14 +32,3 @@ provider "aws" {
 
 # Helm provider configuration
 
-data "aws_eks_cluster_auth" "eks_auth" {
-  name = aws_eks_cluster.eks.name
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = aws_eks_cluster.eks.endpoint
-    cluster_ca_certificate = aws_eks_cluster.eks
-    token                  = data.aws_eks_cluster_auth.eks_auth.token
-  }
-}
