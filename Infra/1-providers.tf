@@ -6,10 +6,15 @@ terraform {
       source  = "hashicorp/aws"
       version = "~>5.49"
     }
+
+    tls = {
+      source = "hashicorp/tls"
+      version = "~>4.0"
+    }
   }
 }
 
-# aws provider configuration
+# provider configuration blocks
 
 provider "aws" {
   region  = local.region
@@ -29,6 +34,4 @@ provider "aws" {
     }
   }
 }
-
-# Helm provider configuration
 
