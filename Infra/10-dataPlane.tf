@@ -2,7 +2,7 @@ resource "aws_eks_node_group" "eks_worker_node" {
   cluster_name  = aws_eks_cluster.eks.name
   node_role_arn = aws_iam_role.eks_worker_node_role.arn
   # Private worker nodes
-  subnet_ids    = [aws_subnet.private_subnet_zone1.id, aws_subnet.private_subnet_zone2.id]
+  subnet_ids = [aws_subnet.private_subnet_zone1.id, aws_subnet.private_subnet_zone2.id]
 
   # Public worker nodes
   #subnet_ids = [aws_subnet.public_subnet_zone1.id, aws_subnet.public_subnet_zone2.id]

@@ -7,6 +7,6 @@ like EFS CSI driver, VPN */
   enable_dns_hostnames = true
 
   tags = {
-    Name = " ${local.cluster-name}-vpc"
+    Name = "${local.cluster-name}-vpc"
   }
 }
