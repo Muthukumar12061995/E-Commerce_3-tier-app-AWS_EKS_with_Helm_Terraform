@@ -1,5 +1,5 @@
 locals {
-  cluster-name = "dev-E-commerce"
+  cluster-name = "dev-e-commerce"
   tf-profile   = "cloud_user"
   region       = "us-east-1"
   zone1        = "us-east-1a"
