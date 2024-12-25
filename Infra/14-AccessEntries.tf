@@ -13,24 +13,24 @@ resource "aws_iam_role" "devops-admin-role" {
           "Action" : "sts:AssumeRole",
           "Principal" : {
             "AWS" : "*"
-          },
-          "Condition" : {
-            "StringEquals" : {
-              "aws:PrincipalTag/Group" : "DevOps-admin"
-            }
           }
+          # "Condition" : {
+          #   "StringEquals" : {
+          #     "aws:PrincipalTag/Group" : "DevOps-admin"
+          #   }
+          # }
         }
       ]
     }
   )
 }
 
-resource "aws_eks_access_entry" "devOps" {
-  cluster_name      = aws_eks_cluster.eks.name
-  principal_arn     = aws_iam_user.devops_user.arn
-  kubernetes_groups = ["devops-admin"]
-  type              = "STANDARD"
-}
+# resource "aws_eks_access_entry" "devOps" {
+#   cluster_name      = aws_eks_cluster.eks.name
+#   principal_arn     = aws_iam_user.devops_user.arn
+#   kubernetes_groups = ["devops-admin"]
+#   type              = "STANDARD"
+# }
 
 
 resource "aws_eks_access_entry" "devOps_role" {
