@@ -2,6 +2,24 @@ resource "aws_iam_user" "devops_user" {
   name = "DevOps"
 }
 
+resource "aws_iam_user_policy" "eks_describe" {
+  name = "eks_describe_access"
+  user = aws_iam_user.devops_user.name
+  policy = <<POLICY
+{
+  "Version" : "2012-10-17",
+  "Statement" : [
+    { 
+      "Effect" : "Allow",
+      "Action" : ["eks:DescribeCluster","eks:ListClusters"],
+      "Resource" : "*"
+    }
+  ]
+}
+POLICY
+}
+
+
 resource "aws_iam_role" "devops-admin-role" {
   name = "devops-admin-role"
   assume_role_policy = jsonencode(

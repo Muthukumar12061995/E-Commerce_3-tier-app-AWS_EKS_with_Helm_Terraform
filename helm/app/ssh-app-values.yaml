@@ -1,0 +1,11 @@
+deploy:
+  replicaCount: 3
+  image:
+    repo: 975050050231.dkr.ecr.us-east-1.amazonaws.com/base.image/ubuntu
+    tag: latest
+  containerPort: 22
+service:
+  type: LoadBalancer
+  awsLBType: nlb
+  servicePort: 22
+  containerPort: 22

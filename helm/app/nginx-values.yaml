@@ -1,0 +1,11 @@
+deploy:
+  replicaCount: 3
+  image:
+    repo: nginx
+    tag: latest
+  containerPort: 80
+service:
+  type: LoadBalancer
+  awsLBType: alb
+  servicePort: 80
+  containerPort: 80
