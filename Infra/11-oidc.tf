@@ -8,5 +8,4 @@ resource "aws_iam_openid_connect_provider" "eks_oidc" {
   thumbprint_list = [data.tls_certificate.ca_thumprint.certificates[0].sha1_fingerprint]
 
   client_id_list = ["sts.amazonaws.com"]
-
 }
