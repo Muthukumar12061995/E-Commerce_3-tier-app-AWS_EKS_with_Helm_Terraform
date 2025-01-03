@@ -18,7 +18,7 @@ terraform {
 
 provider "aws" {
   region  = local.region
-  profile = local.tf-profile
+  # profile = local.tf-profile # trigger from github action
 
   # Optional - assume role to get access to manage aws resources 
   # assume_role {
