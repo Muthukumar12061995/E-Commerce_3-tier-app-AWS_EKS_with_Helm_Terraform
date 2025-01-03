@@ -6,6 +6,7 @@ on:
       - main 
     types:
       - closed # Only trigger when PR is closed (merged)
+workflow_dispatch: # Enable manual triggering 
 
 jobs:
   terraform:

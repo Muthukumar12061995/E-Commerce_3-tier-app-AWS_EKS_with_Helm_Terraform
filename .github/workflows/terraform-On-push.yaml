@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'Infra/**'  # Trigger only when files in Infra folder are modified
+  workflow_dispatch: # Enabled manual triggering 
 
 jobs:
   terraform:
