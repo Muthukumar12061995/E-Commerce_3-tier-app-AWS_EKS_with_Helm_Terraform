@@ -3,7 +3,7 @@ name: terraform apply on PR merge
 on:
   push: # when you push local changes to remote repo
     branches:
-      - main
+      - main 
   # pull_request: # Trigger when a PR merge with main branch
   #   branches:
   #     - main 

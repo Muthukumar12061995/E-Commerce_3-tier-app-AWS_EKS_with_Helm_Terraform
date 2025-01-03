@@ -14,7 +14,7 @@ resource "aws_eks_node_group" "eks_worker_node" {
   }
 
   remote_access {
-    ec2_ssh_key = aws_key_pair.ec2_ssh_key.id
+    # ec2_ssh_key = aws_key_pair.ec2_ssh_key.id
     # Sourcer SG allowed to have ssh access to workload
     # source_security_group_ids = [aws_security_group.eks_workerNode_sg.id]
   }
