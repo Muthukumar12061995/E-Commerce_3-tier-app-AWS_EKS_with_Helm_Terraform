@@ -54,35 +54,3 @@ resource "aws_efs_access_point" "nginx_access" {
     path = "/nginx-data"
   }
 }
-
-resource "kubernetes_storage_class" "efs_sc" {
-  metadata {
-    name = "efs-sc"
-  }
-  storage_provisioner = "efs.csi.aws.com"
-  reclaim_policy = "Retain"
-  volume_binding_mode = "Immediate"
-  
-  parameters = {
-    provisioningMode = "efs-ap"
-    fileSystemId = aws_efs_file_system.efs.id
-    accessPointId = aws_efs_access_point.nginx_access.id
-  }
-
-}
-
-resource "kubernetes_persistent_volume_claim" "efs_pvc" {
-  metadata {
-    name = "efs-pvc"
-  }
-
-  spec {
-    storage_class_name = "efs-sc"
-    access_modes = ["ReadWriteMany"]
-    resources {
-      requests = {
-        storage = "5Gi"
-      }
-    }
-  }
-}

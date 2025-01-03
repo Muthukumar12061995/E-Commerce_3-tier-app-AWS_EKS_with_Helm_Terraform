@@ -1,14 +1,11 @@
 name: terraform apply on PR merge
 
 on:
-  push: # when you push local changes to remote repo
+  pull_request: # Trigger when a PR merge with main branch
     branches:
       - main 
-  # pull_request: # Trigger when a PR merge with main branch
-  #   branches:
-  #     - main 
-  #   types:
-  #     - closed # Only trigger when PR is closed (merged)
+    types:
+      - closed # Only trigger when PR is closed (merged)
 
 jobs:
   terraform:
